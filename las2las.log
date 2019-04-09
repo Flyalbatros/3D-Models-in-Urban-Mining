@@ -1,0 +1,164 @@
+2019-01-16 12:10:18|   0.0|  0.0|INFORM|FME 2018.1.0.3 (20180926 - Build 18552 - WIN64)
+2019-01-16 12:10:18|   0.0|  0.0|INFORM|FME_HOME is 'C:\Program Files\FME\'
+2019-01-16 12:10:20|   0.0|  0.0|INFORM|FME Database Edition (node locked-crc)
+2019-01-16 12:10:20|   0.0|  0.0|INFORM|Serial Number: 0
+2019-01-16 12:10:20|   0.0|  0.0|INFORM|Temporary License: 62 days left.
+2019-01-16 12:10:20|   0.0|  0.0|INFORM|Machine host name is: DESKTOP-10URGLM
+2019-01-16 12:10:20|   0.0|  0.0|INFORM|START - ProcessID: 12784, peak process memory usage: 28316 kB, current process memory usage: 28316 kB
+2019-01-16 12:10:20|   0.0|  0.0|INFORM|FME Configuration: Command line arguments are `C:\Program Files\FME\fme.exe' `C:/Users/P.A. Ruben/Desktop/Master thesis/12 - coding space\wb-xlate-1547636986738_17280' `LOG_STANDARDOUT' `YES' `LogCountServerName' `{0e988849-9f6d-4094-9da5-623ef6529bfd}'
+2019-01-16 12:10:20|   0.1|  0.0|INFORM|FME Configuration: Connection Storage: 'C:\Users\P.A. Ruben\AppData\Roaming\Safe Software\FME\'
+2019-01-16 12:10:23|   0.1|  0.1|INFORM|Shared folders for formats are : C:\Program Files\FME\datasources;C:\Users\P.A. Ruben\Documents\FME\Formats
+2019-01-16 12:10:23|   0.1|  0.0|INFORM|Shared folders for transformers are : C:\Users\P.A. Ruben\AppData\Roaming\Safe Software\FME\Packages\18552-win64\transformers;C:\Program Files\FME\transformers;C:\Users\P.A. Ruben\Documents\FME\Transformers
+2019-01-16 12:10:23|   0.1|  0.0|INFORM|Shared folders for coordinate systems are : C:\Users\P.A. Ruben\Documents\FME\CoordinateSystems
+2019-01-16 12:10:23|   0.1|  0.0|INFORM|Shared folders for coordinate system exceptions are : C:\Users\P.A. Ruben\Documents\FME\CoordinateSystemExceptions
+2019-01-16 12:10:23|   0.1|  0.0|INFORM|Shared folders for coordinate system grid overrides are : C:\Users\P.A. Ruben\Documents\FME\CoordinateSystemGridOverrides
+2019-01-16 12:10:23|   0.1|  0.0|INFORM|Shared folders for CS-MAP transformation exceptions are : C:\Users\P.A. Ruben\Documents\FME\CsmapTransformationExceptions
+2019-01-16 12:10:23|   0.1|  0.0|INFORM|Shared folders for transformer categories are : C:\Users\P.A. Ruben\Documents\FME\TransformerCategories
+2019-01-16 12:10:23|   0.1|  0.0|INFORM|FME Configuration: Reader Keyword is `MULTI_READER'
+2019-01-16 12:10:23|   0.1|  0.0|INFORM|FME Configuration: Writer Keyword is `MULTI_WRITER'
+2019-01-16 12:10:23|   0.1|  0.0|INFORM|FME Configuration: Writer Group Definition Keyword is `MULTI_WRITER_DEF'
+2019-01-16 12:10:23|   0.1|  0.0|INFORM|FME Configuration: Reader type is `MULTI_READER'
+2019-01-16 12:10:23|   0.1|  0.0|INFORM|FME Configuration: Writer type is `MULTI_WRITER'
+2019-01-16 12:10:23|   0.1|  0.0|INFORM|FME Configuration: No destination coordinate system set
+2019-01-16 12:10:23|   0.1|  0.0|INFORM|FME Configuration: Current working folder is `C:\Users\P.A. Ruben\Desktop\Master thesis\12 - coding space'
+2019-01-16 12:10:23|   0.1|  0.0|INFORM|FME Configuration: Temporary folder is `C:\Users\PA9C50~1.RUB\AppData\Local\Temp', set from environment variable `TEMP'
+2019-01-16 12:10:23|   0.1|  0.0|INFORM|FME Configuration: FME_HOME is `C:\Program Files\FME\'
+2019-01-16 12:10:23|   0.1|  0.0|INFORM|FME Configuration: FME_BASE is 'no'
+2019-01-16 12:10:23|   0.1|  0.0|INFORM|FME Configuration: FME_MF_DIR is 'C:\Users\P.A. Ruben\Desktop\Master thesis\12 - coding space/'
+2019-01-16 12:10:23|   0.1|  0.0|INFORM|FME Configuration: FME_MF_NAME is 'las2las.fmw'
+2019-01-16 12:10:23|   0.1|  0.0|INFORM|FME Configuration: FME_PRODUCT_NAME is 'FME(R) 2018.1.0.3'
+2019-01-16 12:10:23|   0.1|  0.0|INFORM|System Status: 149.65 GB of disk space available in the FME temporary folder (C:\Users\PA9C50~1.RUB\AppData\Local\Temp)
+2019-01-16 12:10:23|   0.1|  0.0|INFORM|System Status: 128.00 TB of virtual memory available
+2019-01-16 12:10:23|   0.1|  0.0|INFORM|Operating System: Microsoft Windows 10 64-bit  (Build 17134)
+2019-01-16 12:10:23|   0.1|  0.0|INFORM|FME Platform: WIN64
+2019-01-16 12:10:23|   0.1|  0.0|INFORM|Locale: en_GB
+2019-01-16 12:10:23|   0.1|  0.0|INFORM|Code Page: 1252  (ANSI - Latin I)
+2019-01-16 12:10:23|   0.1|  0.0|INFORM|FME Configuration: Process limit is 15.82 GB of physical memory
+2019-01-16 12:10:23|   0.2|  0.0|INFORM|FME Configuration: Start freeing memory when process usage exceeds 47.45 GB of virtual memory
+2019-01-16 12:10:23|   0.2|  0.0|INFORM|FME Configuration: Stop freeing memory when process usage is below 35.59 GB of virtual memory
+2019-01-16 12:10:23|   0.2|  0.0|INFORM|Creating writer for format: 
+2019-01-16 12:10:23|   0.2|  0.0|INFORM|Creating reader for format: 
+2019-01-16 12:10:23|   0.2|  0.0|INFORM|MULTI_READER(MULTI_READER): Will fail with first member reader failure
+2019-01-16 12:10:23|   0.2|  0.0|INFORM|MULTI_READER(MULTI_READER): Adding LAS Reader with keyword LAS_5
+2019-01-16 12:10:23|   0.2|  0.0|INFORM|Using Multi Reader with keyword `MULTI_READER' to read multiple datasets
+2019-01-16 12:10:23|   0.2|  0.0|INFORM|Creating reader for format: ASPRS Lidar Data Exchange Format (LAS)
+2019-01-16 12:10:23|   0.2|  0.0|INFORM|Trying to find a DYNAMIC plugin for reader named `LAS'
+2019-01-16 12:10:23|   0.2|  0.0|INFORM|FME Configuration: Source coordinate system for reader LAS_5[LAS] set to `EPSG:28992'
+2019-01-16 12:10:23|   0.4|  0.2|INFORM|Coordinate System `EPSG:28992' parameters: CS_NAME=`Netherlands-RDNew-2008' DESC_NM=`Netherlands, Amersfoort RD 2008 datum, New System' DT_NAME=`Amersfoort-RD-2008' GROUP=`EUROPE' MAP_SCL=`1' ORG_LAT=`52.15616055555556' ORG_LNG=`5.387638888888889' PROJ=`OSTERO' QUAD=`1' SCL_RED=`0.9999079' SOURCE=`Kadaster' UNIT=`METER' X_OFF=`155000' Y_OFF=`463000' 
+2019-01-16 12:10:23|   0.4|  0.0|INFORM|Loaded module 'LAS' from file 'C:\Program Files\FME\LIDAR_FME.dll'
+2019-01-16 12:10:23|   0.4|  0.0|INFORM|FME API version of module 'LAS' matches current internal version (3.8 20180604)
+2019-01-16 12:10:23|   0.4|  0.0|INFORM|FME Configuration: Using FME Reprojection Engine
+2019-01-16 12:10:23|   0.4|  0.0|INFORM|Reprojected search envelope from (91791, 433888) - (91883, 433940) in coordinate system `EPSG:28992' to (91791, 433888) - (91883, 433940) in coordinate system `EPSG:28992'
+2019-01-16 12:10:23|   0.4|  0.0|INFORM|Using MultiWriter with keyword `MULTI_WRITER' to output data (ID_ATTRIBUTE is `multi_writer_id')
+2019-01-16 12:10:23|   0.4|  0.0|INFORM|Writer output will be ordered by value of multi_writer_id
+2019-01-16 12:10:23|   0.4|  0.0|INFORM|Loaded module 'LogCount_func' from file 'C:\Program Files\FME\plugins/LogCount_func.dll'
+2019-01-16 12:10:23|   0.4|  0.0|INFORM|FME API version of module 'LogCount_func' matches current internal version (3.8 20180604)
+2019-01-16 12:10:23|   0.4|  0.0|INFORM|Loaded module 'ThinPointCloud_func' from file 'C:\Program Files\FME\plugins/ThinPointCloud_func.dll'
+2019-01-16 12:10:23|   0.4|  0.0|INFORM|FME API version of module 'ThinPointCloud_func' matches current internal version (3.8 20180604)
+2019-01-16 12:10:23|   0.4|  0.0|INFORM|Loaded module 'PointCloudSplitterFactory' from file 'C:\Program Files\FME\plugins/PointCloudSplitterFactory.dll'
+2019-01-16 12:10:23|   0.4|  0.0|INFORM|FME API version of module 'PointCloudSplitterFactory' matches current internal version (3.8 20180604)
+2019-01-16 12:10:28|   5.0|  4.5|INFORM|Point Cloud Clipping: Clipped 9340000 of 403713733 points
+2019-01-16 12:10:33|   9.9|  5.0|INFORM|Point Cloud Clipping: Clipped 19500000 of 403713733 points
+2019-01-16 12:10:38|  15.0|  5.0|INFORM|Point Cloud Clipping: Clipped 30220000 of 403713733 points
+2019-01-16 12:10:43|  20.0|  5.0|INFORM|Point Cloud Clipping: Clipped 40280000 of 403713733 points
+2019-01-16 12:10:48|  25.0|  5.0|INFORM|Point Cloud Clipping: Clipped 50270000 of 403713733 points
+2019-01-16 12:10:53|  30.0|  5.0|INFORM|Point Cloud Clipping: Clipped 60240000 of 403713733 points
+2019-01-16 12:10:58|  35.0|  5.0|INFORM|Point Cloud Clipping: Clipped 70460000 of 403713733 points
+2019-01-16 12:11:03|  40.0|  5.0|INFORM|Point Cloud Clipping: Clipped 80790000 of 403713733 points
+2019-01-16 12:11:08|  45.0|  5.0|INFORM|Point Cloud Clipping: Clipped 90780000 of 403713733 points
+2019-01-16 12:11:13|  50.0|  5.0|INFORM|Point Cloud Clipping: Clipped 100730000 of 403713733 points
+2019-01-16 12:11:18|  55.0|  5.0|INFORM|Point Cloud Clipping: Clipped 110690000 of 403713733 points
+2019-01-16 12:11:23|  60.0|  5.0|INFORM|Point Cloud Clipping: Clipped 121130000 of 403713733 points
+2019-01-16 12:11:28|  65.0|  5.0|INFORM|Point Cloud Clipping: Clipped 131370000 of 403713733 points
+2019-01-16 12:11:33|  70.0|  5.0|INFORM|Point Cloud Clipping: Clipped 141580000 of 403713733 points
+2019-01-16 12:11:38|  75.0|  5.0|INFORM|Point Cloud Clipping: Clipped 151960000 of 403713733 points
+2019-01-16 12:11:43|  80.0|  5.0|INFORM|Point Cloud Clipping: Clipped 162060000 of 403713733 points
+2019-01-16 12:11:48|  85.0|  5.0|INFORM|Point Cloud Clipping: Clipped 172340000 of 403713733 points
+2019-01-16 12:11:53|  90.0|  5.0|INFORM|Point Cloud Clipping: Clipped 182520000 of 403713733 points
+2019-01-16 12:11:58|  95.0|  5.0|INFORM|Point Cloud Clipping: Clipped 192200000 of 403713733 points
+2019-01-16 12:12:03| 100.0|  5.0|INFORM|Point Cloud Clipping: Clipped 201970000 of 403713733 points
+2019-01-16 12:12:08| 105.0|  5.0|INFORM|Point Cloud Clipping: Clipped 211860000 of 403713733 points
+2019-01-16 12:12:13| 110.0|  5.0|INFORM|Point Cloud Clipping: Clipped 221790000 of 403713733 points
+2019-01-16 12:12:18| 115.0|  5.0|INFORM|Point Cloud Clipping: Clipped 231830000 of 403713733 points
+2019-01-16 12:12:23| 120.0|  5.0|INFORM|Point Cloud Clipping: Clipped 242020000 of 403713733 points
+2019-01-16 12:12:28| 125.0|  5.0|INFORM|Point Cloud Clipping: Clipped 252390000 of 403713733 points
+2019-01-16 12:12:33| 130.0|  5.0|INFORM|Point Cloud Clipping: Clipped 262680000 of 403713733 points
+2019-01-16 12:12:38| 135.0|  5.0|INFORM|Point Cloud Clipping: Clipped 272570000 of 403713733 points
+2019-01-16 12:12:43| 140.0|  5.0|INFORM|Point Cloud Clipping: Clipped 282550000 of 403713733 points
+2019-01-16 12:12:48| 145.0|  5.0|INFORM|Point Cloud Clipping: Clipped 292300000 of 403713733 points
+2019-01-16 12:12:53| 150.0|  5.0|INFORM|Point Cloud Clipping: Clipped 302250000 of 403713733 points
+2019-01-16 12:12:58| 155.0|  5.0|INFORM|Point Cloud Clipping: Clipped 312200000 of 403713733 points
+2019-01-16 12:13:03| 160.0|  5.0|INFORM|Point Cloud Clipping: Clipped 321990000 of 403713733 points
+2019-01-16 12:13:08| 165.1|  5.0|INFORM|Point Cloud Clipping: Clipped 331930000 of 403713733 points
+2019-01-16 12:13:13| 170.1|  5.0|INFORM|Point Cloud Clipping: Clipped 342010000 of 403713733 points
+2019-01-16 12:13:18| 175.1|  5.0|INFORM|Point Cloud Clipping: Clipped 352130000 of 403713733 points
+2019-01-16 12:13:23| 180.1|  5.0|INFORM|Point Cloud Clipping: Clipped 362100000 of 403713733 points
+2019-01-16 12:13:28| 185.1|  5.0|INFORM|Point Cloud Clipping: Clipped 372130000 of 403713733 points
+2019-01-16 12:13:33| 190.1|  5.0|INFORM|Point Cloud Clipping: Clipped 382310000 of 403713733 points
+2019-01-16 12:13:38| 195.1|  5.0|INFORM|Point Cloud Clipping: Clipped 392580000 of 403713733 points
+2019-01-16 12:13:43| 200.1|  5.0|INFORM|Point Cloud Clipping: Clipped 402680000 of 403713733 points
+2019-01-16 12:13:43| 200.6|  0.5|INFORM|Point Cloud Clipping: Clipped 403713733 of 403713733 points
+2019-01-16 12:13:43| 200.6|  0.0|INFORM|Creating writer for format: ASPRS Lidar Data Exchange Format (LAS)
+2019-01-16 12:13:43| 200.6|  0.0|INFORM|Trying to find a DYNAMIC plugin for writer named `LAS'
+2019-01-16 12:13:43| 200.6|  0.0|INFORM|FME API version of module 'LAS' matches current internal version (3.8 20180604)
+2019-01-16 12:13:43| 200.6|  0.0|INFORM|FME Configuration: No destination coordinate system set
+2019-01-16 12:13:43| 200.6|  0.0|INFORM|FME API version of module 'LAS' matches current internal version (3.8 20180604)
+2019-01-16 12:13:43| 200.6|  0.0|INFORM|Writer `LAS_6' of type `LAS' using group definition keyword `LAS_6_DEF'
+2019-01-16 12:13:43| 200.6|  0.0|INFORM|FME API version of module 'LAS' matches current internal version (3.8 20180604)
+2019-01-16 12:13:43| 200.6|  0.0|INFORM|LAS writer: Directive '_VERSION' has the value '1.2'
+2019-01-16 12:13:43| 200.6|  0.0|INFORM|LAS writer: Directive '_COMPRESSION' has the value 'None'
+2019-01-16 12:13:43| 200.6|  0.0|INFORM|LAS writer: Writing point cloud with 15141 point(s) to file 'C:\Users\P.A. Ruben\Desktop\Master thesis\05 - trial data\kerk_bldg.las'
+2019-01-16 12:13:43| 200.6|  0.0|STATS |LAS_5ClippingFactoryPipeline::CLIPPER(ClippingFactory): Processed 1 input feature(s), of which 0 feature(s) were clipped, 0 feature(s) were totally inside and 0 feature(s) were totally outside
+2019-01-16 12:13:43| 200.6|  0.0|INFORM|MULTI_READER(MULTI_READER): Done reading 1 features from 1 readers
+2019-01-16 12:13:43| 200.6|  0.0|INFORM|Emptying factory pipeline
+2019-01-16 12:13:43| 200.6|  0.0|STATS |Router and Unexpected Input Remover(RoutingFactory): Tested 1 input feature(s), wrote 1 output feature(s): 1 matched merge filters, 1 were routed to output, 0 could not be routed.
+2019-01-16 12:13:43| 200.6|  0.0|STATS |Unexpected Input Remover Nuker(TeeFactory): Cloned 0 input feature(s) into 0 output feature(s)
+2019-01-16 12:13:43| 200.6|  0.0|STATS |LAS (LAS_3) Splitter(TeeFactory): Cloned 0 input feature(s) into 0 output feature(s)
+2019-01-16 12:13:43| 200.6|  0.0|STATS |LAS (LAS_2) Splitter(TeeFactory): Cloned 0 input feature(s) into 0 output feature(s)
+2019-01-16 12:13:43| 200.6|  0.0|STATS |LAS (LAS_1) Splitter(TeeFactory): Cloned 0 input feature(s) into 0 output feature(s)
+2019-01-16 12:13:43| 200.6|  0.0|STATS |LAS (LAS_4) Splitter(TeeFactory): Cloned 0 input feature(s) into 0 output feature(s)
+2019-01-16 12:13:43| 200.6|  0.0|STATS |LAS (LAS_5) Splitter(TeeFactory): Cloned 1 input feature(s) into 1 output feature(s)
+2019-01-16 12:13:43| 200.6|  0.0|STATS |LAS_LAS_5 Feature Counter -1 27(TeeFactory): Cloned 1 input feature(s) into 1 output feature(s)
+2019-01-16 12:13:43| 200.6|  0.0|STATS |PointCloudThinner(TeeFactory): Cloned 1 input feature(s) into 1 output feature(s)
+2019-01-16 12:13:43| 200.6|  0.0|STATS |PointCloudThinner_Rejector(TestFactory): Tested 1 input feature(s) -- 0 feature(s) passed and 1 feature(s) failed
+2019-01-16 12:13:43| 200.6|  0.0|INFORM|PointCloudThinner_<REJECTED> Feature Recorder -1 2147680268(RecorderFactory): Recorded 0 feature(s) to file `C:\Users\PA9C50~1.RUB\AppData\Local\Temp\wb-cache-las2las-w17280\Main_PointCloudThinner -1 12 fo 1 _lt_REJECTED_gt_  0  9568e10fc786f47b49e9f3b5d352e92c543895da.ffsupdating'
+2019-01-16 12:13:43| 200.6|  0.0|STATS |PointCloudThinner_THINNED Feature Counter -1 14(TeeFactory): Cloned 1 input feature(s) into 1 output feature(s)
+2019-01-16 12:13:43| 200.6|  0.0|STATS |PointCloudThinner_<REJECTED> Feature Counter -1 2147680268(TeeFactory): Cloned 0 input feature(s) into 0 output feature(s)
+2019-01-16 12:13:43| 200.6|  0.0|STATS |PointCloudThinner_<Rejected>(TeeFactory): Cloned 0 input feature(s) into 0 output feature(s)
+2019-01-16 12:13:43| 200.6|  0.0|STATS |PointCloudSplitter SPLIT Splitter(TeeFactory): Cloned 4 input feature(s) into 8 output feature(s)
+2019-01-16 12:13:43| 200.6|  0.0|INFORM|PointCloudSplitter_<REJECTED> Feature Recorder -1 2147680262(RecorderFactory): Recorded 0 feature(s) to file `C:\Users\PA9C50~1.RUB\AppData\Local\Temp\wb-cache-las2las-w17280\Main_PointCloudSplitter -1 6 fo 1 _lt_REJECTED_gt_  0  ad9f7e8dc3a25cb0b22731ea9ea33b7b75bbe5ec.ffsupdating'
+2019-01-16 12:13:43| 200.6|  0.0|STATS |PointCloudSplitter_SPLIT_0_IeGsmHA3G7g= Feature Counter -1 15(TeeFactory): Cloned 4 input feature(s) into 4 output feature(s)
+2019-01-16 12:13:43| 200.6|  0.0|STATS |PointCloudSplitter_SPLIT_1_jxs8J2ux/6w= Feature Counter -1 17(TeeFactory): Cloned 4 input feature(s) into 4 output feature(s)
+2019-01-16 12:13:43| 200.6|  0.0|STATS |PointCloudSplitter_<REJECTED> Feature Counter -1 2147680262(TeeFactory): Cloned 0 input feature(s) into 0 output feature(s)
+2019-01-16 12:13:43| 200.6|  0.0|STATS |PointCloudSplitter_<Rejected>(TeeFactory): Cloned 0 input feature(s) into 0 output feature(s)
+2019-01-16 12:13:43| 200.6|  0.0|STATS |Tester_2 (Disabled) Nuker(TeeFactory): Cloned 4 input feature(s) into 0 output feature(s)
+2019-01-16 12:13:43| 200.6|  0.0|STATS |Tester(TestFactory): Tested 4 input feature(s) -- 1 feature(s) passed and 3 feature(s) failed
+2019-01-16 12:13:43| 200.6|  0.0|STATS |Tester_PASSED Feature Counter -1 24(TeeFactory): Cloned 1 input feature(s) into 1 output feature(s)
+2019-01-16 12:13:43| 200.6|  0.0|STATS |Destination Feature Type Routing Correlator(RoutingFactory): Tested 1 input feature(s), wrote 1 output feature(s): 0 matched merge filters, 1 were routed to output, 0 could not be routed.
+2019-01-16 12:13:43| 200.6|  0.0|STATS |Final Output Nuker(TeeFactory): Cloned 0 input feature(s) into 0 output feature(s)
+2019-01-16 12:13:43| 200.6|  0.0|INFORM|=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+2019-01-16 12:13:43| 200.6|  0.0|INFORM|Feature output statistics for `LAS' writer using keyword `LAS_6':
+2019-01-16 12:13:43| 200.6|  0.0|STATS |=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+2019-01-16 12:13:43| 200.6|  0.0|STATS |                               Features Written
+2019-01-16 12:13:43| 200.7|  0.0|STATS |=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+2019-01-16 12:13:43| 200.7|  0.0|STATS |kerk_bldg                                                                    1
+2019-01-16 12:13:43| 200.7|  0.0|STATS |==============================================================================
+2019-01-16 12:13:43| 200.7|  0.0|STATS |Total Features Written                                                       1
+2019-01-16 12:13:43| 200.7|  0.0|STATS |=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+2019-01-16 12:13:43| 200.7|  0.0|STATS |=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+2019-01-16 12:13:43| 200.7|  0.0|STATS |                            Features Read Summary
+2019-01-16 12:13:43| 200.7|  0.0|STATS |=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+2019-01-16 12:13:43| 200.7|  0.0|STATS |LAS                                                                          1
+2019-01-16 12:13:43| 200.7|  0.0|STATS |==============================================================================
+2019-01-16 12:13:43| 200.7|  0.0|STATS |Total Features Read                                                          1
+2019-01-16 12:13:43| 200.7|  0.0|STATS |=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+2019-01-16 12:13:43| 200.7|  0.0|STATS |=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+2019-01-16 12:13:43| 200.7|  0.0|STATS |                           Features Written Summary
+2019-01-16 12:13:43| 200.7|  0.0|STATS |=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+2019-01-16 12:13:43| 200.7|  0.0|STATS |kerk_bldg                                                                    1
+2019-01-16 12:13:43| 200.7|  0.0|STATS |==============================================================================
+2019-01-16 12:13:43| 200.7|  0.0|STATS |Total Features Written                                                       1
+2019-01-16 12:13:43| 200.7|  0.0|STATS |=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
+2019-01-16 12:13:43| 200.7|  0.0|INFORM|Translation was SUCCESSFUL with 0 warning(s) (1 feature(s) output)
+2019-01-16 12:13:43| 200.7|  0.0|INFORM|FME Session Duration: 3 minutes 24.8 seconds. (CPU: 198.3s user, 2.3s system)
+2019-01-16 12:13:43| 200.7|  0.0|INFORM|END - ProcessID: 12784, peak process memory usage: 82180 kB, current process memory usage: 82180 kB
