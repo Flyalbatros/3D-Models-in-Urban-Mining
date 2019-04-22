@@ -72,7 +72,7 @@ def alpha_shape(points, alpha):
     triangles = list(polygonize(m))
     return cascaded_union(triangles), edge_points
 
-def voronoi_shape(all_points, region_dict, bounding_geometry, bounding_polygon):
+def voronoi_shape(all_points, region_dict, distance_list, bounding_polygon):
     #print(geometry.MultiPoint(all_points))
     #print("input",all_points,",", region_dict,",", bounding_geometry,",", bounding_polygon)
     #print("input", all_points)
@@ -93,6 +93,7 @@ def voronoi_shape(all_points, region_dict, bounding_geometry, bounding_polygon):
     # fig = voronoi_plot_2d(vor, show_vertices=False, line_colors='black', line_width=3, line_alpha=0.6, point_size=3)
     # plt.show()
     region_outputs = [] #storage for output polygons which will be merged in the last step
+    out_stats = []
     #prepare the bounding box geometry
     # border_lines = []
     # for border_pt_idx in range(0, len(bounding_geometry) - 1):
@@ -100,9 +101,12 @@ def voronoi_shape(all_points, region_dict, bounding_geometry, bounding_polygon):
     #print("bounding", bounding_polygon)
     #for each of the regions...
     for ids_to_extract in region_dict:
+        deviation_dist_list = []
         polygons_list = []  # storage for output polygons which will be merged in the last step of each loop
+        reg_stats = []
         #now extract the voronoi cells
         for id in ids_to_extract:
+            deviation_dist_list.append(distance_list[id])
             #print("cellpoint", geometry.Point(all_points[id]))
             #print("id", id)
             cell_vertices = vor.regions[vor.point_region[id]] # get the region of the point of which the index is in the input
@@ -226,10 +230,17 @@ def voronoi_shape(all_points, region_dict, bounding_geometry, bounding_polygon):
             #print(geometry.Polygon(polygon_coords))
             polygons_list.append(geometry.Polygon(polygon_coords).intersection(bounding_polygon))
             #print(geometry.Polygon(polygon_coords).intersection(bounding_polygon))
+            #distance statistics
+        mean_distance = np.mean(deviation_dist_list)
+        ninety_percentile = np.percentile(deviation_dist_list, 90)
+        if ninety_percentile<0:
+            ninety_percentile = np.percentile(deviation_dist_list, 10)
+        #outstats.append((mean_distance, ninety_percentile))
+        out_stats.append((mean_distance, ninety_percentile))
         region_outputs.append(cascaded_union(polygons_list))
-    output = cascaded_union(region_outputs)
+    #output = cascaded_union(region_outputs)
     #print("output", output)
-    return output
+    return region_outputs, out_stats
             # if border_cell == 1: # if the cell is a border cell, we need to intersect it with the bounding box which is an input
             #     for ridge_idx in range(0,len(vor.ridge_vertices)): #first, let's find the ridge points of the edges going to infinity
             #         #print("checking", vor.ridge_vertices, vor.ridge_points)

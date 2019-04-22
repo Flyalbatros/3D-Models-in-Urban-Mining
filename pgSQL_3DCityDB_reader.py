@@ -20,16 +20,17 @@ class CityDB_connection(object):
         self.ids = []
         for el in data:
             self.ids.append(el[0])
-            #print(el[1])
+            #print("element", el[1])
             bbox_coords = el[1][10:].replace("(",'').replace(")",'').split(',')
             #original format is wkt string, we convert it here to min max values
             min_x = float(bbox_coords[0].split(' ')[0])
             min_y = float(bbox_coords[0].split(' ')[1])
-            #min_z = float(bbox_coords[0].split(' ')[2])
+            min_z = float(bbox_coords[0].split(' ')[2])
             max_x = float(bbox_coords[1].split(' ')[0])
             max_y = float(bbox_coords[2].split(' ')[1])
+            max_z = float(bbox_coords[2].split(' ')[2])
             #max_z = float(bbox_coords[2].split(' ')[2])
-            self.bboxs.append([(min_x,min_y),(max_x, max_y)])
+            self.bboxs.append([(min_x,min_y, min_z),(max_x, max_y, max_z)])
         return self.bboxs, self.ids
 
     def get_bbox(self, building_id):
@@ -50,10 +51,11 @@ class CityDB_connection(object):
 
     def get_roof_geom(self, building_id):
         #for a given buiding, retrieve all the roof geometries (as a 3D WKT)
-        roof_geoms = self.query_and_return("SELECT ST_AsText(geometry) from surface_geometry where parent_id in (select lod2_multi_surface_id from citydb_view.thematic_surface where objectclass_id=33 and building_id in (select id from building where building_root_id in (select id from cityobject where gmlid='{}')));".format(building_id))
+        roof_geoms = self.query_and_return("SELECT ST_AsText(geometry), gmlid from surface_geometry where parent_id in (select lod2_multi_surface_id from citydb_view.thematic_surface where objectclass_id=33 and building_id in (select id from building where building_root_id in (select id from cityobject where gmlid='{}')));".format(building_id))
         #print(roof_geoms)
         #roof_geoms is a list of tuples containing the WKT strings
         out_coord_list = []
+        id_list = []
         out_wkts = []
         for geom in roof_geoms:
             coord_string_list = geom[0][10:].replace("(",'').replace(")",'').split(',')
@@ -64,11 +66,12 @@ class CityDB_connection(object):
                 for coord in coord_string:
                     coord_float.append(float(coord))
                 surf_coord_list.append(tuple(coord_float))
+            id_list.append(geom[1])
             out_coord_list.append(tuple(surf_coord_list))
             out_wkts.append(geom[0])
         #print(len(out_coord_list), len(roof_geoms))
         #now we have a list of tuples!
-        return out_coord_list, out_wkts
+        return out_coord_list, out_wkts, id_list
 
     def get_all_roof_geom(self, id_list):
         self.all_roof_geom = []

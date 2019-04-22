@@ -1,0 +1,1 @@
+apex flight line; row in apex data; col in apex data; cell geometry; cell area; percentage of deviations; percentage of cell in roof

@@ -4,10 +4,13 @@ from scipy import spatial
 from scipy.linalg import eigh
 from scipy.sparse import csr_matrix
 from scipy.sparse.csgraph import minimum_spanning_tree
-import pgSQL_3DCityDB_reader as pgSQL
 import time
 import math
-from shapely.geometry import Polygon, Point
+from shapely.geometry import Polygon, Point, LineString
+from shapely.ops import cascaded_union
+
+import pgSQL_3DCityDB_reader as pgSQL
+import reading_envi as mesh_reader
 
 def data_loader(input_file):
     print(input_file)
@@ -158,6 +161,7 @@ def height_deviations_normal(inFile, min_dist, pt_poly_dict, surf_list, normals)
 def height_deviations_vertical(coord_list, min_dist, max_dist, surf, normal, inFile, indexes):
     curr_surf_seeds = []
     curr_ref_pt = surf[0]
+    out_distance_list = []
     #print(normal)
     for pt_idx in range(0,len(coord_list)):
         shortest_vector_length = shortest_distance(curr_ref_pt, normal, coord_list[pt_idx])
@@ -168,10 +172,11 @@ def height_deviations_vertical(coord_list, min_dist, max_dist, surf, normal, inF
         displacement_v[1] = - curr_normal[1]
         displacement_v[2] = -(displacement_v[0]*curr_normal[0]+displacement_v[1]*curr_normal[1])/curr_normal[2]
         distance = displacement_v[2]+curr_normal[2]
-        if coord_list[pt_idx][0]==91996.767:
-            print("distance", distance)
-            print(normal, curr_ref_pt)
-        if distance > min_dist and distance < max_dist:
+        out_distance_list.append(distance)
+        # if coord_list[pt_idx][0]==91996.767:
+        #     print("distance", distance)
+        #     print(normal, curr_ref_pt)
+        if abs(distance) > min_dist and abs(distance) < max_dist:
             #print(distance)
             curr_surf_seeds.append(pt_idx)
             inFile.user_data[indexes[pt_idx]] = 9
@@ -179,7 +184,7 @@ def height_deviations_vertical(coord_list, min_dist, max_dist, surf, normal, inF
             #inFile.user_data[pt_idx] = 0
             pass
     #print((normals[surf_idx][0]**2+normals[surf_idx][1]**2+normals[surf_idx][2]**2)**2)
-    return curr_surf_seeds
+    return curr_surf_seeds, out_distance_list
 
 def shortest_distance(plane_pt, normal_v, query_pt):
     plane_query_v = np.array([query_pt[0]-plane_pt[0],query_pt[1]-plane_pt[1],query_pt[2]-plane_pt[2]])
@@ -429,7 +434,7 @@ def regions_to_geometry_alpha(coord_list, region_dict):
             outfile.write("\n")
             outfile.close()
 
-def regions_to_geometry_voronoi(coord_list, region_dict, bound_geometry):
+def regions_to_geometry_voronoi(coord_list, region_dict, bound_geometry, distance_list, outfile, building_id, roof_surf_id):
     from alpha_shape import voronoi_shape
     #print(region_dict)
     #prepare outfile
@@ -441,7 +446,8 @@ def regions_to_geometry_voronoi(coord_list, region_dict, bound_geometry):
     #     #outfile = open("wkt_test_subsurf.txt", 'a')
     #     #outfile.close()
     border_output = []
-    voronoi_wkt = voronoi_shape([item[0:2] for item in coord_list], region_dict, [item[0:2] for item in bound_geometry.exterior.coords], bound_geometry)
+    #print(region_dict)
+    voronoi_wkts, stats = voronoi_shape([item[0:2] for item in coord_list], region_dict, distance_list, bound_geometry)
     # # region_coords = []
     # # for pt_ind in region:
     # #     pt_coord = coord_list[pt_ind][0:2]
@@ -449,12 +455,14 @@ def regions_to_geometry_voronoi(coord_list, region_dict, bound_geometry):
     # #print(region_coords)
     # concave_hull, edge_points = alpha_shape(region_coords, alpha=0.1)
     # print(concave_hull)
-    outfile = open("wkt_test_subsurf.txt", 'a')
-    #print("voronoi_shape", voronoi_wkt)
-    #print(str(voronoi_wkt)+'\n')
-    outfile.write(str(voronoi_wkt))
-    outfile.write("\n")
+    outfile = open(outfile, 'a')
+    for deviation_idx in range(0, len(voronoi_wkts)):
+        #print("voronoi_shape", voronoi_wkt)
+        #print(str(voronoi_wkt)+'\n')
+        outfile.write(str(roof_surf_id) + ';' + str(voronoi_wkts[deviation_idx]) + ';' + str(stats[deviation_idx][0]) + ';' + str(stats[deviation_idx][1]) + ';' + str(building_id))
+        outfile.write("\n")
     outfile.close()
+    return cascaded_union(voronoi_wkts)
 
 def get_normals_and_merge(roof_surf_wkts):
     from shapely import wkt as wkt
@@ -462,14 +470,23 @@ def get_normals_and_merge(roof_surf_wkts):
     list_normals = []
     idx_to_merge = []
     roof_surf_geoms = []
+    centroid_list = []
+    #centroid_weight_sum = 0
     #data loading
     for roof_surf_wkt in roof_surf_wkts:
         roof_surf_geom = wkt.loads(roof_surf_wkt)
         roof_surf_geoms.append(roof_surf_geom)
+        centroid = roof_surf_geom.centroid.coords[0] #we get the centroid but only in 2D
         #print(len(roof_surf_list))
         #if len(roof_surf_geom.exterior.coords)>0:
         #print(roof_surf_geom.exterior.coords[0:3])
-        normal, ref_pt = fit_plane(roof_surf_geom.exterior.coords)
+        normal, curvature = fit_plane(roof_surf_geom.exterior.coords)
+        ref_pt = roof_surf_geom.exterior.coords[0]
+        centroid_z = ((normal[0]*(centroid[0]-ref_pt[0])+normal[1]*(centroid[1]-ref_pt[1]))/(-normal[2]))+ref_pt[2]
+        centroid_list.append((centroid[0],centroid[1],centroid_z))
+        #centroid_sum += centroid_z*roof_surf_geom.area
+        #centroid_weight_sum += roof_surf_geom.area
+        #let's find the missing coordinate of the centroid
         #print("normal", normal)
         list_normals.append(normal)
     for idx in range(0,len(list_normals)-1):
@@ -512,16 +529,15 @@ def get_normals_and_merge(roof_surf_wkts):
     list_normals = [x for x in list_normals if x[0] is not np.nan]
     #print(list_normals)
     #print(roof_surf_list)
-    return roof_surf_geoms, list_normals
+    return roof_surf_geoms, list_normals, centroid_list
 
 def merge_geoms(polygons):
-    from shapely.ops import cascaded_union
     #print("merging geoms")
     for el in polygons:
         pass
         #print(el)
     union = cascaded_union(polygons)
-    #print("merged",  union)
+    print("merged",  union)
     return union
 
     #print(geom_list)
@@ -560,7 +576,7 @@ def point_in_polygon(roof_surf_geom, ptcloud, normal_vectors):
             bounds = roof_surf_geom[poly_idx].bounds
             if bounds[0]<=ptcloud.x[pt_idx]<=bounds[2] and bounds[1]<=ptcloud.y[pt_idx]<=bounds[3]: #xmin, xmax, ymin, ymax
             #print("dist", shortest_distance(roof_surf_list[poly_idx][0],normal_vectors[poly_idx],(ptcloud.x[pt_idx], ptcloud.y[pt_idx], ptcloud.z[pt_idx])))
-                if roof_surf_geom[poly_idx].contains(pt)==True and shortest_distance(roof_surf_geom[poly_idx].exterior.coords[0],normal_vectors[poly_idx],(ptcloud.x[pt_idx], ptcloud.y[pt_idx], ptcloud.z[pt_idx]))>-0.4:
+                if roof_surf_geom[poly_idx].contains(pt)==True and shortest_distance(roof_surf_geom[poly_idx].exterior.coords[0],normal_vectors[poly_idx],(ptcloud.x[pt_idx], ptcloud.y[pt_idx], ptcloud.z[pt_idx]))>-1:
                     curr_polygon_list.append(pt_idx)
         points_poly_match.append(curr_polygon_list)
     return points_poly_match
@@ -607,7 +623,7 @@ def workflow(start_idx, end_idx, bboxs, ids, cityGML_data, inFile, q):
                         regions = grow_regions(local_dev_seeds, local_tree, local_coord_list, 0.999, n_vecs[idx], reduced_pc, point_in_poly_list[idx])
                         #print("all regions", regions)
                         #print( "len", roof_surf[idx])
-                        regions_to_geometry_voronoi(local_coord_list, regions, roof_surf[idx])
+                        deviations.append(regions_to_geometry_voronoi(local_coord_list, regions, roof_surf[idx]))
                     else:
                         print("rejected cropped PC in building", index, ", too much occlusion")
         q.put(["finished building", ids[index]])
@@ -615,24 +631,46 @@ def workflow(start_idx, end_idx, bboxs, ids, cityGML_data, inFile, q):
     return
 
 if __name__=='__main__':
+    filter_height = 0.4
+    plane_tolerance = 0.9962
     inFile = data_loader('globalPC/AHN_buildings.las')
     test = pgSQL.CityDB_connection("testdb", "127.0.0.1")
     bboxs, ids = test.get_all_bboxs()
-    ids_to_valid = "ID_0599100000611197,ID_0599100000027481,ID_0599100010072060,ID_0599100000765391,ID_0599100000656246,ID_0599100000750379,ID_0599100000378124,ID_0599100000675492,ID_0599100000658069,ID_0599100000658094,ID_0599100000658101,ID_0599100000658076,ID_0599100000658081,ID_0599100000658084,ID_0599100000102628,ID_0599100010032072,ID_0599100010047890,ID_0599100000257345,ID_0599100000027015,ID_0599100010044691,ID_0599100010069491,ID_0599100000093445,ID_0599100000056121 ,ID_0599100000084259,ID_0599100000653459,ID_0599100000653456,ID_0599100000653454,ID_0599100000653452,ID_0599100000759802,ID_0599100000653445,ID_0599100000653443,ID_0599100000653441,ID_0599100000653439,ID_0599100000653434,ID_0599100000653432,ID_0599100000653424,ID_0599100000653422,ID_0599100000653420,ID_0599100000653418,ID_0599100000653415,ID_0599100000653413,ID_0599100000653411,ID_0599100000653409,ID_0599100000653407,ID_0599100000653514,ID_ 0599100000653512,ID_0599100000653510,ID_0599100000653508,ID_0599100000653506,ID_0599100000653503,ID_0599100000653501,ID_0599100000653499,ID_0599100000653497,ID_0599100000653495 ,ID_0599100000653492,ID_0599100000653149,ID_0599100000308130,ID_0599100000308132,ID_0599100000308133,ID_0599100000308135,ID_0599100000308137,ID_0599100000308139,ID_0599100000432373,ID_0599100000751173,ID_0599100000622723,ID_0599100000622719,ID_0599100000622714,ID_0599100000622710,ID_0599100000622706,ID_0599100000622701,ID_0599100000627165, ID_0599100000622689,ID_0599100000622693,ID_0599100000622697,ID_0599100000622700,ID_0599100000622705,ID_0599100000622709,ID_0599100000622713,ID_0599100000622718,ID_0599100000622722,ID_0599100000622728,ID_0599100000700754 ,ID_0599100000701862,ID_0599100000622675,ID_0599100000622670,ID_0599100000622666,ID_0599100000622661,ID_0599100000622657,ID_0599100000622655,ID_0599100000622652,ID_0599100000622648,ID_0599100000622643,ID_0599100000622639,ID_0599100000622635,ID_0599100000700808,ID_0599100000622629,ID_0599100000701040,ID_0599100000622797,ID_0599100000701304,ID_0599100000622698,ID_0599100000622696,ID_0599100000622692,ID_0599100000622688,ID_0599100000622684,ID_0599100000622680,ID_0599100000622676,ID_0599100000622671,ID_0599100000622667,ID_0599100000622662,ID_0599100000622660,ID_0599100000622658".replace(' ','').split(',')
-    #ids_to_valid = ["ID_0599100000653454"]
+    #ids_to_valid = "ID_0599100000611197,ID_0599100000027481,ID_0599100010072060,ID_0599100000765391,ID_0599100000656246,ID_0599100000750379,ID_0599100000378124,ID_0599100000675492,ID_0599100000658069,ID_0599100000658094,ID_0599100000658101,ID_0599100000658076,ID_0599100000658081,ID_0599100000658084,ID_0599100000102628,ID_0599100010032072,ID_0599100010047890,ID_0599100000257345,ID_0599100000027015,ID_0599100010044691,ID_0599100010069491,ID_0599100000093445,ID_0599100000056121 ,ID_0599100000084259,ID_0599100000653459,ID_0599100000653456,ID_0599100000653454,ID_0599100000653452,ID_0599100000759802,ID_0599100000653445,ID_0599100000653443,ID_0599100000653441,ID_0599100000653439,ID_0599100000653434,ID_0599100000653432,ID_0599100000653424,ID_0599100000653422,ID_0599100000653420,ID_0599100000653418,ID_0599100000653415,ID_0599100000653413,ID_0599100000653411,ID_0599100000653409,ID_0599100000653407,ID_0599100000653514,ID_ 0599100000653512,ID_0599100000653510,ID_0599100000653508,ID_0599100000653506,ID_0599100000653503,ID_0599100000653501,ID_0599100000653499,ID_0599100000653497,ID_0599100000653495 ,ID_0599100000653492,ID_0599100000653149,ID_0599100000308130,ID_0599100000308132,ID_0599100000308133,ID_0599100000308135,ID_0599100000308137,ID_0599100000308139,ID_0599100000432373,ID_0599100000751173,ID_0599100000622723,ID_0599100000622719,ID_0599100000622714,ID_0599100000622710,ID_0599100000622706,ID_0599100000622701,ID_0599100000627165, ID_0599100000622689,ID_0599100000622693,ID_0599100000622697,ID_0599100000622700,ID_0599100000622705,ID_0599100000622709,ID_0599100000622713,ID_0599100000622718,ID_0599100000622722,ID_0599100000622728,ID_0599100000700754 ,ID_0599100000701862,ID_0599100000622675,ID_0599100000622670,ID_0599100000622666,ID_0599100000622661,ID_0599100000622657,ID_0599100000622655,ID_0599100000622652,ID_0599100000622648,ID_0599100000622643,ID_0599100000622639,ID_0599100000622635,ID_0599100000700808,ID_0599100000622629,ID_0599100000701040,ID_0599100000622797,ID_0599100000701304,ID_0599100000622698,ID_0599100000622696,ID_0599100000622692,ID_0599100000622688,ID_0599100000622684,ID_0599100000622680,ID_0599100000622676,ID_0599100000622671,ID_0599100000622667,ID_0599100000622662,ID_0599100000622660,ID_0599100000622658".replace(' ','').split(',')
+    #ids_to_valid = ["ID_0599100000690299"]
+    ids_to_valid = ["ID_0599100000765391"]
     print(ids_to_valid)
-    outfile = open("wkt_test_subsurf.txt", 'w')
-    outfile.write("Geometry\n")
+    deviation_filename = "results\deviations_{}_{}_{}.txt".format(filter_height,plane_tolerance,ids_to_valid[0])
+    outfile = open(deviation_filename, 'w')
+    outfile.write("roof surface gmlid; deviations geometry; mean distance to roof; 90th percentile distance to roof; building gmlid \n")
     outfile.close()
+    mesh_filename = 'apex_pixels\pixels_{}_{}_{}.txt'.format(filter_height,plane_tolerance,ids_to_valid[0])
+    pixel_outfile = open(mesh_filename, 'w')
+    pixel_outfile.write('apex flight line; row in apex data; col in apex data; cell geometry; cell area; percentage of deviations; percentage of cell in roof\n')
+    pixel_outfile.close()
     #print(ids.index(132960))
+    #prepare the pixels:
+    orthocorr_file_south = mesh_reader.envi_file(r"C:\Users\P.A. Ruben\Desktop\Master thesis\12 - coding space\3D-Models-in-Urban-Mining\APEX_data\MM097_ROTTE_140917_a031d_calibr_cube000_igm.bsq")
+    orthocorr_file_north = mesh_reader.envi_file(r"C:\Users\P.A. Ruben\Desktop\Master thesis\12 - coding space\3D-Models-in-Urban-Mining\APEX_data\MM097_ROTTE_140917_a021d_calibr_cube000_igm.bsq")
+    separation_line = [(89508.101273913489422, 434346.112242897565011), (98242.169222927186638, 435157.773509686987381)]
+    separation_linestring = LineString(separation_line)
+    correction_vector = (-(separation_line[1][1] - separation_line[0][1]),(separation_line[1][0]-separation_line[0][0])) #pointing upwards
+    length = math.sqrt(correction_vector[0]**2+correction_vector[1]**2)
+    correction_vector = (correction_vector[0]/length, correction_vector[1]/length)
+    print("vector", correction_vector)
     for id_to_valid in ids_to_valid:
         index = ids.index(id_to_valid)
         print("starting building", ids[index], index)
+        print("bbox", bboxs[index])
         reduced_pc = crop_pc(inFile,bboxs[index], ids[index])
+        bbox_center = ((bboxs[index][0][0]+bboxs[index][1][0])/2, (bboxs[index][0][1]+bboxs[index][1][1])/2)
+        side_indicator = (bbox_center[0]-separation_line[0][0])*(separation_line[1][1]-separation_line[0][1])-(bbox_center[1]-separation_line[0][1])*(separation_line[1][0]-separation_line[0][0])
         if reduced_pc != None:
-            roof_surf_list, roof_surf_wkts = test.get_roof_geom(ids[index])
+            roof_surf_list, roof_surf_wkts, roof_surf_ids = test.get_roof_geom(ids[index])
             #print(roof_surf_wkts)
-            roof_surf, n_vecs = get_normals_and_merge(roof_surf_wkts)
+            roof_surf, n_vecs, mean_heights = get_normals_and_merge(roof_surf_wkts)
+            print('roof surfs', len(roof_surf), len(mean_heights))
+            all_roof_surfs = cascaded_union(roof_surf)
             #for geom in roof_surf:
                 #print(str(geom)+'/n')
             point_in_poly_list = point_in_polygon(roof_surf, reduced_pc, n_vecs)
@@ -643,7 +681,8 @@ if __name__=='__main__':
             #for part in roof_surf_wkts:
                 #print(part)
             for idx in range(0,len(roof_surf)):
-                if len(point_in_poly_list[idx])>3:
+                if len(point_in_poly_list[idx]) > roof_surf[idx].area*4:
+                    #deviations = []
                     #if len(point_in_poly_list[idx]) > roof_surf[idx].area*8:
                     #print("roof geom", roof_surf[idx])
                     #print("roof wkt", roof_surf_wkts[idx])
@@ -652,17 +691,42 @@ if __name__=='__main__':
                         local_coord_list.append([reduced_pc.x[pt], reduced_pc.y[pt], reduced_pc.z[pt]])
                     print("looking for seeds")
                     print(roof_surf[idx])
-                    local_dev_seeds = height_deviations_vertical(local_coord_list, 0.3, 20, roof_surf[idx].exterior.coords, n_vecs[idx], reduced_pc, point_in_poly_list[idx])
+                    local_dev_seeds, distance_list = height_deviations_vertical(local_coord_list, filter_height, 20, roof_surf[idx].exterior.coords, n_vecs[idx], reduced_pc, point_in_poly_list[idx])
                     if len(local_dev_seeds)>0:
                         local_tree = spatial.cKDTree(local_coord_list)
-                        regions = grow_regions(local_dev_seeds, local_tree, local_coord_list, 0.995, n_vecs[idx], reduced_pc, point_in_poly_list[idx])
+                        regions = grow_regions(local_dev_seeds, local_tree, local_coord_list, plane_tolerance, n_vecs[idx], reduced_pc, point_in_poly_list[idx])
                         #print("all regions", regions)
                         #print( "len", roof_surf[idx])
-                        regions_to_geometry_voronoi(local_coord_list, regions, roof_surf[idx])
+                        deviations = regions_to_geometry_voronoi(local_coord_list, regions, roof_surf[idx], distance_list, deviation_filename, id_to_valid, roof_surf_ids[idx])
+                    #all_deviations = cascaded_union(deviations)
+                    #print("deviations", all_deviations)
+                    bbox_center = ((bboxs[index][0][0]+bboxs[index][1][0])/2, (bboxs[index][0][1]+bboxs[index][1][1])/2)
+                    bbox_center_point = Point(mean_heights[idx][0], mean_heights[idx][1])
+                    distance_to_flight_line = 1450 - bbox_center_point.distance(separation_linestring)
+                    building_height = mean_heights[idx][2]-bboxs[index][0][2]
+                    print("height", mean_heights[idx][2]-bboxs[index][0][2])
+                    #pixel_outfile = open('apex_pixels\pixels_{}.txt'.format(id_to_valid), 'w')
+                    # pixel_outfile = open('apex_pixels\pixels_all.txt'.format(id_to_valid), 'w')
+                    # pixel_outfile.write('geometry;deviation_percentage\n')
+                    # pixel_outfile.close()
+                    if side_indicator>0:
+                        print("south side")
+                        correction_unit = (distance_to_flight_line / (7000 - building_height)) * 7000 - distance_to_flight_line
+                        centerpoint_list = orthocorr_file_south.crop_points_bbox(bboxs[index], 'apex_points_in_bbox_flight_3.txt')
+                        orthocorr_file_south.selection_to_pixels_bbox(centerpoint_list, mesh_filename, correction_vector, correction_unit, roof_surf[idx], deviations, 'south')
+                    else:
+                        print("north side")
+                        distance_to_flight_line = distance_to_flight_line*-1 #to get the correction vector in the right direction
+                        correction_unit = (distance_to_flight_line / (7000 - building_height)) * 7000 - distance_to_flight_line
+                        centerpoint_list = orthocorr_file_north.crop_points_bbox(bboxs[index], 'apex_points_in_bbox_flight_2.txt')
+                        #print(centerpoint_list)
+                        orthocorr_file_north.selection_to_pixels_bbox(centerpoint_list, mesh_filename.format(id_to_valid), correction_vector, correction_unit, roof_surf[idx], deviations, 'north')
                 else:
-                    print("rejected cropped PC in building", index, ", too much occlusion")
-        print("finished building", ids[index])
-            #print("regions", regions)
+                    print("rejected cropped PC in building", index, "due to occlusion or too small surface")
+                print("finished building", ids[index])
+
+
+    #print("regions", regions)
             #border_pt_groups = extract_border_pts(local_coord_list, regions, reduced_pc, point_in_poly_list[idx])
             #print("border", border_pt_groups)
             #border_pts_to_geometry_mst(local_coord_list,border_pt_groups, reduced_pc, point_in_poly_list[idx])
