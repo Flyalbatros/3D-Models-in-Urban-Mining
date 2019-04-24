@@ -187,10 +187,13 @@ class envi_file(object):
             cell = Polygon(pixel_border_pt_coords_28992)
             overlap_area_ratio = Polygon(pixel_border_pt_coords_28992).intersection(roof_polygon).area/cell.area
             if overlap_area_ratio>=0.7:
-                print(cell)
-                print(deviations)
-                deviation_perc = cell.intersection(deviations).area/cell.area
-                print("dev", deviation_perc)
+                #print(cell)
+                #print(deviations)
+                if deviations == None:
+                    deviation_perc = 0
+                else:
+                    deviation_perc = cell.intersection(deviations).area/cell.area
+                #print("dev", deviation_perc)
                 #print("intersects")
                 output = open(output_file, 'a')
                 output.write(side + ';' + str(row) + ';' + str(col) + ';' + str(LineString(pixel_border_pt_coords_28992)) + ';' + str(cell.area) + ';' + str(deviation_perc) + ';' + str(overlap_area_ratio) + '\n')
