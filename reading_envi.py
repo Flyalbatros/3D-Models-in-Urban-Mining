@@ -150,7 +150,7 @@ class envi_file(object):
             #output.write(str(Point(center_coords))+'\n')
         output.close()
 
-    def selection_to_pixels_bbox(self, selected_points, output_file, correction_vector, correction_unit, roof_polygon, deviations, side):
+    def selection_to_pixels_bbox(self, selected_points, output_file, correction_vector, correction_unit, roof_polygon, deviations, side, building_id, roof_surf_id):
         correction_x = correction_vector[0]*correction_unit
         correction_y = correction_vector[1]*correction_unit
         #new_CRS_roof_pts = []
@@ -196,7 +196,7 @@ class envi_file(object):
                 #print("dev", deviation_perc)
                 #print("intersects")
                 output = open(output_file, 'a')
-                output.write(side + ';' + str(row) + ';' + str(col) + ';' + str(LineString(pixel_border_pt_coords_28992)) + ';' + str(cell.area) + ';' + str(deviation_perc) + ';' + str(overlap_area_ratio) + '\n')
+                output.write(str(building_id) + ';' + str(roof_surf_id) + ';' + side + ';' + str(row) + ';' + str(col) + ';' + str(LineString(pixel_border_pt_coords_28992)) + ';' + str(cell.area) + ';' + str(deviation_perc) + ';' + str(overlap_area_ratio) + '\n')
                 # print(pixel_border_pt_coords)
                 # output.write(str(MultiPoint(diagonal_neighbor_coords))+'\n')
                 # output.write(str(Point(center_coords))+'\n')

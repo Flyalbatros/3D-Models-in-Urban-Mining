@@ -170,6 +170,7 @@ def height_deviations_vertical(coord_list, min_dist, max_dist, surf, normal, inF
         displacement_v = [np.nan, np.nan, np.nan]
         displacement_v[0] = - curr_normal[0]
         displacement_v[1] = - curr_normal[1]
+        #print("!!!",displacement_v,curr_normal,"!!!")
         displacement_v[2] = -(displacement_v[0]*curr_normal[0]+displacement_v[1]*curr_normal[1])/curr_normal[2]
         distance = displacement_v[2]+curr_normal[2]
         out_distance_list.append(distance)
@@ -631,22 +632,29 @@ def workflow(start_idx, end_idx, bboxs, ids, cityGML_data, inFile, q):
     return
 
 if __name__=='__main__':
-    filter_height = 0.4
-    plane_tolerance = 0.9994
+    filter_height = 0.2
+    plane_tolerance = 0.9962
     inFile = data_loader('globalPC/AHN_buildings.las')
     test = pgSQL.CityDB_connection("testdb", "127.0.0.1")
     bboxs, ids = test.get_all_bboxs()
+    ids_file=open('extended_validation_set.txt', 'r')
+    ids_to_valid = ids_file.readlines()
+    #ids_to_valid = ["ID_0599100000658069,ID_0599100000658094,ID_0599100000658101,ID_0599100000658076,ID_0599100000658081,ID_0599100000658084,ID_0599100000188004,ID_0599100000759271,ID_0599100000768220,ID_0599100100004134,ID_0599100000674816,ID_0599100000628296"]
+    #ids_to_valid = ids_to_valid[0].replace(' ','').replace('\n','').split(',')
+    #print(ids_to_valid)
     #ids_to_valid = "ID_0599100000611197,ID_0599100000027481,ID_0599100010072060,ID_0599100000765391,ID_0599100000656246,ID_0599100000750379,ID_0599100000378124,ID_0599100000675492,ID_0599100000658069,ID_0599100000658094,ID_0599100000658101,ID_0599100000658076,ID_0599100000658081,ID_0599100000658084,ID_0599100000102628,ID_0599100010032072,ID_0599100010047890,ID_0599100000257345,ID_0599100000027015,ID_0599100010044691,ID_0599100010069491,ID_0599100000093445,ID_0599100000056121 ,ID_0599100000084259,ID_0599100000653459,ID_0599100000653456,ID_0599100000653454,ID_0599100000653452,ID_0599100000759802,ID_0599100000653445,ID_0599100000653443,ID_0599100000653441,ID_0599100000653439,ID_0599100000653434,ID_0599100000653432,ID_0599100000653424,ID_0599100000653422,ID_0599100000653420,ID_0599100000653418,ID_0599100000653415,ID_0599100000653413,ID_0599100000653411,ID_0599100000653409,ID_0599100000653407,ID_0599100000653514,ID_ 0599100000653512,ID_0599100000653510,ID_0599100000653508,ID_0599100000653506,ID_0599100000653503,ID_0599100000653501,ID_0599100000653499,ID_0599100000653497,ID_0599100000653495 ,ID_0599100000653492,ID_0599100000653149,ID_0599100000308130,ID_0599100000308132,ID_0599100000308133,ID_0599100000308135,ID_0599100000308137,ID_0599100000308139,ID_0599100000432373,ID_0599100000751173,ID_0599100000622723,ID_0599100000622719,ID_0599100000622714,ID_0599100000622710,ID_0599100000622706,ID_0599100000622701,ID_0599100000627165, ID_0599100000622689,ID_0599100000622693,ID_0599100000622697,ID_0599100000622700,ID_0599100000622705,ID_0599100000622709,ID_0599100000622713,ID_0599100000622718,ID_0599100000622722,ID_0599100000622728,ID_0599100000700754 ,ID_0599100000701862,ID_0599100000622675,ID_0599100000622670,ID_0599100000622666,ID_0599100000622661,ID_0599100000622657,ID_0599100000622655,ID_0599100000622652,ID_0599100000622648,ID_0599100000622643,ID_0599100000622639,ID_0599100000622635,ID_0599100000700808,ID_0599100000622629,ID_0599100000701040,ID_0599100000622797,ID_0599100000701304,ID_0599100000622698,ID_0599100000622696,ID_0599100000622692,ID_0599100000622688,ID_0599100000622684,ID_0599100000622680,ID_0599100000622676,ID_0599100000622671,ID_0599100000622667,ID_0599100000622662,ID_0599100000622660,ID_0599100000622658".replace(' ','').split(',')
-    #ids_to_valid = ["ID_0599100000690299"]
-        ids_to_valid = ["ID_0599100000768288"]
+    #ids_to_valid = ["ID_0599100010019907"]
+    #ids_to_valid = ids_to_valid + ["ID_0599100000628296","ID_0599100000753081","ID_0599100010019907"]
+    #ids_to_valid = ["ID_0599100000657581", "ID_0599100000616635","ID_0599100000658067","ID_0599100010049459"]
+    ids_to_valid = ["ID_0599100000101436"]
     print(ids_to_valid, filter_height, plane_tolerance)
-    deviation_filename = "results\deviations_{}_{}_{}.txt".format(filter_height,plane_tolerance,ids_to_valid[0])
+    deviation_filename = "results\deviations_{}_{}_{}.txt".format(filter_height,plane_tolerance,"fake")
     outfile = open(deviation_filename, 'w')
     outfile.write("roof surface gmlid; deviations geometry; mean distance to roof; 90th percentile distance to roof; building gmlid \n")
     outfile.close()
-    mesh_filename = 'apex_pixels\pixels_{}_{}_{}.txt'.format(filter_height,plane_tolerance,ids_to_valid[0])
+    mesh_filename = 'apex_pixels\pixels_{}_{}_{}.txt'.format(filter_height,plane_tolerance,"fake")
     pixel_outfile = open(mesh_filename, 'w')
-    pixel_outfile.write('apex flight line; row in apex data; col in apex data; cell geometry; cell area; percentage of deviations; percentage of cell in roof\n')
+    pixel_outfile.write('building gmlid; roof surface gmlid; apex flight line; row in apex data; col in apex data; cell geometry; cell area; percentage of deviations; percentage of cell in roof\n')
     pixel_outfile.close()
     #print(ids.index(132960))
     #prepare the pixels:
@@ -681,7 +689,7 @@ if __name__=='__main__':
             #for part in roof_surf_wkts:
                 #print(part)
             for idx in range(0,len(roof_surf)):
-                if len(point_in_poly_list[idx]) > roof_surf[idx].area*4:
+                if len(point_in_poly_list[idx]) > roof_surf[idx].area*4 and len(point_in_poly_list[idx])>3:
                     #deviations = []
                     #if len(point_in_poly_list[idx]) > roof_surf[idx].area*8:
                     #print("roof geom", roof_surf[idx])
@@ -715,17 +723,17 @@ if __name__=='__main__':
                         print("south side")
                         correction_unit = (distance_to_flight_line / (7000 - building_height)) * 7000 - distance_to_flight_line
                         centerpoint_list = orthocorr_file_south.crop_points_bbox(bboxs[index], 'apex_points_in_bbox_flight_3.txt')
-                        orthocorr_file_south.selection_to_pixels_bbox(centerpoint_list, mesh_filename, correction_vector, correction_unit, roof_surf[idx], deviations, 'south')
+                        orthocorr_file_south.selection_to_pixels_bbox(centerpoint_list, mesh_filename, correction_vector, correction_unit, roof_surf[idx], deviations, 'south', id_to_valid, roof_surf_ids[idx])
                     else:
                         print("north side")
                         distance_to_flight_line = distance_to_flight_line*-1 #to get the correction vector in the right direction
                         correction_unit = (distance_to_flight_line / (7000 - building_height)) * 7000 - distance_to_flight_line
                         centerpoint_list = orthocorr_file_north.crop_points_bbox(bboxs[index], 'apex_points_in_bbox_flight_2.txt')
                         #print(centerpoint_list)
-                        orthocorr_file_north.selection_to_pixels_bbox(centerpoint_list, mesh_filename.format(id_to_valid), correction_vector, correction_unit, roof_surf[idx], deviations, 'north')
+                        orthocorr_file_north.selection_to_pixels_bbox(centerpoint_list, mesh_filename, correction_vector, correction_unit, roof_surf[idx], deviations, 'north', id_to_valid, roof_surf_ids[idx])
                 else:
                     print("rejected cropped PC in building", index, "due to occlusion or too small surface")
-                print("finished building", ids[index])
+            print("finished building", ids[index])
 
 
     #print("regions", regions)
