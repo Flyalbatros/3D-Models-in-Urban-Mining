@@ -202,6 +202,7 @@ class envi_file(object):
                 # output.write(str(Point(center_coords))+'\n')
                 output.close()
 
+
 def coord_transformer(input_CRS, output_CRS, point_coords):
     #https://gis.stackexchange.com/questions/78838/converting-projected-coordinates-to-lat-lon-using-python
     point = gdal.ogr.Geometry(gdal.ogr.wkbPoint)
@@ -241,9 +242,9 @@ if __name__=="__main__":
     geocorr_y = geocorr_file.get_array(2)
     #print(geocorr_x, geocorr_y)
     #geocorr_file.crop_points('bbox_wkt.txt', 'apex_points_in_bbox_flight_3.txt')
-    geocorr_file.selection_to_pixels('apex_points_in_bbox_flight_3.txt', 'pixel_geometry_flight_3.txt')
+    #geocorr_file.selection_to_pixels('apex_points_in_bbox_flight_3.txt', 'pixel_geometry_flight_3.txt')
     #print(geocorr_x[4144][370],geocorr_y[4144][370])
-    #to_xy_file(geocorr_x, geocorr_y, 'xy_coord_wgs84.xyz')
+    to_xy_file(geocorr_x, geocorr_y, 'xy_coord_wgs84.xyz')
 
     #list_pts_luxor=[(228,4144),(369,4145),(376,4140),(379,4143),(371,4147),(288,4045),(317,4032),(298,4058),(271,4072),(463,4125),(475,4076),(475,4086),(449,4104),(479,4113),(552,4279),(657,4251),(327,4057),(331,4053),(332,4061),(359,4145),(388,4143),(381,4137)]
     #select_to_xy_file(geocorr_x, geocorr_y, list_pts_luxor, 'xy_coord_wgs84.xyz')
