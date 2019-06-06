@@ -472,6 +472,7 @@ def get_normals_and_merge(roof_surf_wkts):
     idx_to_merge = []
     roof_surf_geoms = []
     centroid_list = []
+    h_diff_list = []
     #centroid_weight_sum = 0
     #data loading
     for roof_surf_wkt in roof_surf_wkts:
@@ -485,6 +486,12 @@ def get_normals_and_merge(roof_surf_wkts):
         ref_pt = roof_surf_geom.exterior.coords[0]
         centroid_z = ((normal[0]*(centroid[0]-ref_pt[0])+normal[1]*(centroid[1]-ref_pt[1]))/(-normal[2]))+ref_pt[2]
         centroid_list.append((centroid[0],centroid[1],centroid_z))
+        max_h_diff = 0
+        for coord in roof_surf_geom.exterior.coords:
+            h_diff = abs(centroid_z-coord[2])
+            if h_diff>max_h_diff:
+                max_h_diff = h_diff
+        h_diff_list.append(max_h_diff)
         #centroid_sum += centroid_z*roof_surf_geom.area
         #centroid_weight_sum += roof_surf_geom.area
         #let's find the missing coordinate of the centroid
@@ -530,7 +537,7 @@ def get_normals_and_merge(roof_surf_wkts):
     list_normals = [x for x in list_normals if x[0] is not np.nan]
     #print(list_normals)
     #print(roof_surf_list)
-    return roof_surf_geoms, list_normals, centroid_list
+    return roof_surf_geoms, list_normals, centroid_list, h_diff_list
 
 def merge_geoms(polygons):
     #print("merging geoms")
@@ -640,13 +647,13 @@ if __name__=='__main__':
     ids_file=open('extended_validation_set.txt', 'r')
     ids_to_valid = ids_file.readlines()
     #ids_to_valid = ["ID_0599100000658069,ID_0599100000658094,ID_0599100000658101,ID_0599100000658076,ID_0599100000658081,ID_0599100000658084,ID_0599100000188004,ID_0599100000759271,ID_0599100000768220,ID_0599100100004134,ID_0599100000674816,ID_0599100000628296"]
-    #ids_to_valid = ids_to_valid[0].replace(' ','').replace('\n','').split(',')
+    ids_to_valid = ids_to_valid[0].replace(' ','').replace('\n','').split(',')
     #print(ids_to_valid)
     #ids_to_valid = "ID_0599100000611197,ID_0599100000027481,ID_0599100010072060,ID_0599100000765391,ID_0599100000656246,ID_0599100000750379,ID_0599100000378124,ID_0599100000675492,ID_0599100000658069,ID_0599100000658094,ID_0599100000658101,ID_0599100000658076,ID_0599100000658081,ID_0599100000658084,ID_0599100000102628,ID_0599100010032072,ID_0599100010047890,ID_0599100000257345,ID_0599100000027015,ID_0599100010044691,ID_0599100010069491,ID_0599100000093445,ID_0599100000056121 ,ID_0599100000084259,ID_0599100000653459,ID_0599100000653456,ID_0599100000653454,ID_0599100000653452,ID_0599100000759802,ID_0599100000653445,ID_0599100000653443,ID_0599100000653441,ID_0599100000653439,ID_0599100000653434,ID_0599100000653432,ID_0599100000653424,ID_0599100000653422,ID_0599100000653420,ID_0599100000653418,ID_0599100000653415,ID_0599100000653413,ID_0599100000653411,ID_0599100000653409,ID_0599100000653407,ID_0599100000653514,ID_ 0599100000653512,ID_0599100000653510,ID_0599100000653508,ID_0599100000653506,ID_0599100000653503,ID_0599100000653501,ID_0599100000653499,ID_0599100000653497,ID_0599100000653495 ,ID_0599100000653492,ID_0599100000653149,ID_0599100000308130,ID_0599100000308132,ID_0599100000308133,ID_0599100000308135,ID_0599100000308137,ID_0599100000308139,ID_0599100000432373,ID_0599100000751173,ID_0599100000622723,ID_0599100000622719,ID_0599100000622714,ID_0599100000622710,ID_0599100000622706,ID_0599100000622701,ID_0599100000627165, ID_0599100000622689,ID_0599100000622693,ID_0599100000622697,ID_0599100000622700,ID_0599100000622705,ID_0599100000622709,ID_0599100000622713,ID_0599100000622718,ID_0599100000622722,ID_0599100000622728,ID_0599100000700754 ,ID_0599100000701862,ID_0599100000622675,ID_0599100000622670,ID_0599100000622666,ID_0599100000622661,ID_0599100000622657,ID_0599100000622655,ID_0599100000622652,ID_0599100000622648,ID_0599100000622643,ID_0599100000622639,ID_0599100000622635,ID_0599100000700808,ID_0599100000622629,ID_0599100000701040,ID_0599100000622797,ID_0599100000701304,ID_0599100000622698,ID_0599100000622696,ID_0599100000622692,ID_0599100000622688,ID_0599100000622684,ID_0599100000622680,ID_0599100000622676,ID_0599100000622671,ID_0599100000622667,ID_0599100000622662,ID_0599100000622660,ID_0599100000622658".replace(' ','').split(',')
     #ids_to_valid = ["ID_0599100010019907"]
     #ids_to_valid = ids_to_valid + ["ID_0599100000628296","ID_0599100000753081","ID_0599100010019907"]
     #ids_to_valid = ["ID_0599100000657581", "ID_0599100000616635","ID_0599100000658067","ID_0599100010049459"]
-    ids_to_valid = ["ID_0599100000101436"]
+    #ids_to_valid = ["ID_0599100000101436"]
     print(ids_to_valid, filter_height, plane_tolerance)
     deviation_filename = "results\deviations_{}_{}_{}.txt".format(filter_height,plane_tolerance,"fake")
     outfile = open(deviation_filename, 'w')
@@ -666,6 +673,7 @@ if __name__=='__main__':
     length = math.sqrt(correction_vector[0]**2+correction_vector[1]**2)
     correction_vector = (correction_vector[0]/length, correction_vector[1]/length)
     print("vector", correction_vector)
+    max_h_diff_list = []
     for id_to_valid in ids_to_valid:
         index = ids.index(id_to_valid)
         print("starting building", ids[index], index)
@@ -676,7 +684,10 @@ if __name__=='__main__':
         if reduced_pc != None:
             roof_surf_list, roof_surf_wkts, roof_surf_ids = test.get_roof_geom(ids[index])
             #print(roof_surf_wkts)
-            roof_surf, n_vecs, mean_heights = get_normals_and_merge(roof_surf_wkts)
+            roof_surf, n_vecs, mean_heights, max_h_diffs = get_normals_and_merge(roof_surf_wkts)
+            max_h_diff_list = max_h_diff_list+max_h_diffs
+            print("test list", max_h_diff_list)
+            continue
             print('roof surfs', len(roof_surf), len(mean_heights))
             all_roof_surfs = cascaded_union(roof_surf)
             #for geom in roof_surf:
